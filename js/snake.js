@@ -22,7 +22,7 @@ var Snake = function(x, y) {
     }
     this.body[0].x += this.xSpeed * scale;
     this.body[0].y += this.ySpeed * scale;
-
+    this.death();
     if(this.body[0].x == food.x && this.body[0].y == food.y){
       score++;
       food.destroy();
@@ -46,13 +46,13 @@ var Snake = function(x, y) {
       this.grow(this.eatenFood.shift());
     }
 
-    this.death();
+
   }
 
   this.death = function(){
     if(this.body[0].x >= properties.width || this.body[0].x < 0 || this.body[0].y >= properties.height || this.body[0].y < 3 * scale)
       gameover();
-    for(let i = 1; i < this.body.length; i++){
+    for(let i = 2; i < this.body.length; i++){
       if(this.body[0].x == this.body[i].x && this.body[0].y == this.body[i].y){
         gameover();
       }
