@@ -9,6 +9,7 @@ var snake;
 var food;
 var scale = 20;
 var text;
+var slowdown;
 var gameloop;
 var GameState = {
   preload: function() {},
@@ -31,7 +32,12 @@ var GameState = {
       if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
         snake.changeDirection(0, 1);
       }
-      snake.update();
+      slowdown++;
+      if(slowdown > 4){
+        snake.update();
+        slowdown = 0;
+      }
+
     } else {
       if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
         newgame();
@@ -82,9 +88,9 @@ var updateScore = function() {
 
 var newgame = function(){
   game.world.removeAll();
-
+  slowdown = 0;
   gameloop = true;
-  game.time.slowMotion = 5;
+  //game.time.slowMotion = 0;
   game.stage.backgroundColor = "#262626";
   score = 0;
   topbar();
