@@ -3,51 +3,57 @@ var properties = {
   height: 600
 }
 var game = new Phaser.Game(properties.width, properties.height, Phaser.AUTO, 'game');
+
+var score = 0;
 var snake;
+var food;
 var scale = 20;
-var snakeSprite;
 var GameState = {
   preload: function() {
 
   },
 
   create: function() {
-    var bmd = game.add.bitmapData(0,0);
-    game.time.desiredFps = 6;
-    // draw to the canvas context like normal
-    bmd.ctx.beginPath();
-    bmd.ctx.rect(0,0,scale,scale);
-    bmd.ctx.fillStyle = '#ff0000';
-    bmd.ctx.fill();
+     game.time.slowMotion = 6;
 
-    // use the bitmap data as the texture for the sprite
-    snake = new Snake(game.world.centerX - 100, game.world.centerY, bmd);
-
+     snake = new Snake(game.world.centerX - 100, game.world.centerY);
+     let location = foodLocation();
+     food = game.add.sprite(location.x * scale, location.y * scale, block('#ff0000'));
   },
 
   update: function() {
     if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT))
     {
-        snake.xSpeed = -1;
-        snake.ySpeed = 0;
+        snake.changeDirection(-1,0);
     }
     else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
     {
-      snake.xSpeed = 1;
-      snake.ySpeed = 0;
+      snake.changeDirection(1,0);
     }
     else if (game.input.keyboard.isDown(Phaser.Keyboard.UP))
     {
-      snake.xSpeed = 0;
-      snake.ySpeed = -1;
+      snake.changeDirection(0,-1);
     }
     else if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN))
     {
-      snake.xSpeed = 0;
-      snake.ySpeed = 1;
+      snake.changeDirection(0,1);
     }
+
+    // if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
+    // {
+    //   snake.eat();
+    // }
     snake.update();
   }
+}
+
+var foodLocation = function(){
+  let rows = properties.height / scale;
+  let cols = properties.width / scale;
+
+  let x = Math.floor(Math.random() * Math.floor(cols));
+  let y = Math.floor(Math.random() * Math.floor(rows));
+  return {x, y};
 }
 
 game.state.add('GameState', GameState);
