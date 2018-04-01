@@ -43,14 +43,22 @@ var GameState = {
 var foodLocation = function() {
   let rows = properties.height / scale;
   let cols = properties.width / scale;
+  let x;
+  let y;
+  generateNew = false;
+  do{
+    generateNew = false;
+    x = Math.floor(Math.random() * cols);
+    y = Math.floor(Math.random() * (rows - 3)) + 3;
 
-  let x = Math.floor(Math.random() * cols);
-  let y = Math.floor(Math.random() * (rows - 3)) + 3;
+    snake.body.forEach((b) => {
+      if(b.x == x*scale && b.y == y*scale) {
+          generateNew = true;
+        }
+    });
+  } while(generateNew);
   if (x >= 800 || y >= 600) alert("food out of bounds");
-  return {
-    x,
-    y
-  };
+  return {x,y};
 }
 
 var topbar = function() {
